@@ -11,3 +11,26 @@ html, body {
 	height: 100%;
 	background-color: #e4e4e4;
 }
+img{
+	background-color: #333;
+}
+.marker {
+			width: 40px;
+			height: 40px;
+			border-radius: 21px;
+			background: rgba(250, 10, 10, 0.4);
+			border: 1px solid rgba(250, 10, 10, 0.8);
+			position: absolute;
+			margin: -21px 0 0 -21px;
+		}
+		.marker:after {
+			content: "";
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 10px;
+			height: 10px;
+			margin: -5px 0 0 -5px;
+			background: rgba(250, 10, 10, 0.5);
+			border-radius: 5px;
+		}

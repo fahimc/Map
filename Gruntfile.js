@@ -4,10 +4,20 @@ module.exports = function(grunt) {
 		pkg : grunt.file.readJSON('package.json'),
 		gitclone : {
 			clone : {
-				options: {
-                repository : 'https://github.com/angular/angular-seed.git',
-                branch: 'master'
-            }
+				options : {
+					repository : 'https://github.com/angular/angular-seed.git',
+					branch : 'master'
+				}
+			}
+		},
+		concat : {
+			options : {
+				// define a string to put between each file in the concatenated output
+				separator : ';'
+			},
+			dist : {
+				src : ['app/js/component/map/SVGMapMarker.js', 'app/js/component/map/FancyMarker.js', 'app/js/component/map/SVGMap.js'],
+				dest : 'build/SVGMap.min.js'
 			}
 		}
 	});
@@ -16,6 +26,8 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', [""], function() {
 
 	});
+	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.registerTask('compile', ["concat"]);
 	grunt.registerTask('setup', 'setup complete', function() {
 		grunt.file.mkdir("app");
 		grunt.file.mkdir("app/lib");
@@ -29,7 +41,7 @@ module.exports = function(grunt) {
 		//make js file
 		grunt.file.write("app/js/main.js", '(function(window) { function Main() { if(window.addEventListener) { window.addEventListener("load", onLoad); } else { window.attachEvent("onload", onLoad); } } function onLoad() { } Main(); } )(window);');
 		grunt.file.write("app/app.js", '(function() { var express = require("express"); var app = express(); app.use("/js", express.static("./app/js")); app.use("/css", express.static("./app/css")); app.use("/img", express.static("./app/img")); app.listen(3000); app.get("/", function(request, response) { response.sendfile("./app/index.html"); }); })(); ');
-		
+
 		grunt.log.write('Project Setup is Complete').ok();
 	});
 };

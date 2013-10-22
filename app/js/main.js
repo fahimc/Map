@@ -8,12 +8,21 @@
 	}
 
 	function onLoad() {
+		
+		
+		
+		
 		var svgMap = new SVGMap();
 		svgMap.src = "img/world_map.svg";
+		
 		svgMap.build();
 		document.getElementsByClassName("mapHolder")[0].appendChild(svgMap.element);
 		svgMap.arrange();
-		svgMap.addMarker(52.500048,-1.562500);
+		svgMap.addMarker(52.766667,-1.2);
+		svgMap.addMarker(42.500048,21.562500);
+		svgMap.markerItem=FancyMarker;
+		svgMap.addMarker(42.500048,-101.562500);
+		svgMap.addMarker(22.500048,51.562500);
 	}
 	
 	Main();

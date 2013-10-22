@@ -11,6 +11,7 @@
     "grunt-init-plugin":"*",
     "grunt-angular-seed":"*",
     "load-grunt-tasks":"*",
+    "grunt-contrib-concat":"*",
     "grunt-git":"*",
     "grunt-shell":"*"
   },

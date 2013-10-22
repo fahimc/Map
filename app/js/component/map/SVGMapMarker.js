@@ -3,6 +3,7 @@ var SVGMapMarker=function(){};
 {
 	var _ =SVGMapMarker.prototype;
 	_.element=null;
+	_.timestamp=null;
 	_.lat=0;
 	_.lng=0;
 	_.build=function()

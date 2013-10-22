@@ -76,6 +76,7 @@ var SVGMap = function() {
 		// var y = this.y + (this.img.clientHeight - calculatedHeight);
 
 		var marker = new this.markerItem();
+		marker.timestamp = new Date().getTime();
 		marker.build();
 		marker.setStyle();
 		marker.lat = lat;
@@ -86,6 +87,20 @@ var SVGMap = function() {
 
 		this.markerHolder.appendChild(marker.element);
 		this.markers.push(marker);
+	};
+	_.removeMarker=function(lat, lng)
+	{
+		for(var a=0;a<this.markers.length;a++)
+		{
+			var mlat = this.markers[a].lat;
+			var mlng = this.markers[a].lng;
+			if(lat==mlat && lng==mlng)
+			{
+				this.markerHolder.removeChild(marker[a]);
+				array.splice(a, 1);
+				return;
+			}
+		}
 	};
 	_.setMarkerXY = function(marker) {
 		var lat = marker.lat;

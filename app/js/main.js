@@ -23,6 +23,7 @@
 		svgMap.markerItem=FancyMarker;
 		svgMap.addMarker(42.500048,-101.562500);
 		svgMap.addMarker(22.500048,51.562500);
+		
 	}
 	
 	Main();

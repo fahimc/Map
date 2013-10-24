@@ -16,9 +16,16 @@ module.exports = function(grunt) {
 				separator : ';'
 			},
 			dist : {
-				src : ['app/js/component/map/SVGMapMarker.js', 'app/js/component/map/FancyMarker.js', 'app/js/component/map/SVGMap.js'],
+				src : ['app/js/component/map/SVGMapMarker.js', 'app/js/component/map/SVGMap.js'],
+				//dest : ['build/SVGMap.min.js','C:\Projects\Reuters\Project-Sentysis\app\js\vendor\svgmap']
 				dest : 'build/SVGMap.min.js'
 			}
+		},
+		copy : {
+			main : {
+				src : 'build/SVGMap.min.js',
+				dest : 'C:/Projects/Reuters/Project-Sentysis/app/js/vendor/svgmap',
+			},
 		}
 	});
 	// grunt.loadNpmTasks('grunt-git');
@@ -44,4 +51,7 @@ module.exports = function(grunt) {
 
 		grunt.log.write('Project Setup is Complete').ok();
 	});
+
+	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.registerTask('move', ['copy']);
 };

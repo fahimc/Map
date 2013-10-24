@@ -13,6 +13,7 @@
     "load-grunt-tasks":"*",
     "grunt-contrib-concat":"*",
     "grunt-git":"*",
+    "grunt-contrib-copy":"*",
     "grunt-shell":"*"
   },
   "devDependencies": {

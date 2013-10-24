@@ -1,11 +1,13 @@
-var SVGMapMarker=function(){};
+var SVGMapMarker=function(){
+	this.element=null;
+	this.timestamp=null;
+	this.lat=0;
+	this.lng=0;
+};
 (function()
 {
 	var _ =SVGMapMarker.prototype;
-	_.element=null;
-	_.timestamp=null;
-	_.lat=0;
-	_.lng=0;
+	
 	_.build=function()
 	{
 		this.element = document.createElement("DIV");

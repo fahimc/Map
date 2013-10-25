@@ -44,6 +44,16 @@
 		svgMap.addMarker(22.500048,51.562500);
 		svgMap.setScale(3);
 		
+		
+		var overlay = document.createElement("DIV");
+		overlay.style.width="20%";
+		overlay.style.height="20%";
+		overlay.style.position="absolute";
+		overlay.style.backgroundColor="#00f";
+		overlay.style.left="10%";
+		overlay.style.top="10%";
+		
+		svgMap.addOverlay(overlay);
 	}
 	
 	Main();

@@ -3,6 +3,7 @@ var SVGMapMarker=function(){
 	this.timestamp=null;
 	this.lat=0;
 	this.lng=0;
+	this.uid = -1;
 };
 (function()
 {
@@ -11,7 +12,7 @@ var SVGMapMarker=function(){
 	_.build=function()
 	{
 		this.element = document.createElement("DIV");
-		
+		this.element.setAttribute('data-uid',this.uid);
 		
 		
 	};

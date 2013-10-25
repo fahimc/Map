@@ -2,6 +2,7 @@ var MAPINDEX=0;
 var SVGMap = function() {
 	this.element = null;
 	this.markerHolder = null;
+	this.overlayHolder = null;
 	
 	this.src = null;
 	this.scale = 1;
@@ -25,6 +26,7 @@ var SVGMap = function() {
 	this.x = 0;
 	this.y = 0;
 	this.uid=0;
+	this.muid=0;
 };
 (function() {
 	var _ = SVGMap.prototype;
@@ -38,7 +40,10 @@ var SVGMap = function() {
 		this.img.src = this.src;
 
 		this.markerHolder = document.createElement("DIV");
+		this.overlayHolder = document.createElement("DIV");
+		
 		this.element.appendChild(this.img);
+		this.element.appendChild(this.overlayHolder);
 		this.element.appendChild(this.markerHolder);
 		this.setStyle();
 		this.setListeners();
@@ -64,7 +69,8 @@ var SVGMap = function() {
 
 		this.img.style.position = "absolute";
 
-		this.markerHolder.style.position = "relative";
+		this.markerHolder.style.position = "absolute";
+		this.overlayHolder.style.position = "absolute";
 		this.img.ondragstart = function() {
 			return false;
 		};
@@ -74,13 +80,26 @@ var SVGMap = function() {
 
 		this.markerHolder.style.width = (this.scale * this.element.clientWidth) + "px";
 		this.markerHolder.style.height = this.img.clientHeight + "px";
+		
+		this.overlayHolder.style.width = (this.scale * this.element.clientWidth) + "px";
+		this.overlayHolder.style.height = this.img.clientHeight + "px";
+		
 		this.setXY();
 		this.positionMarkers();
 	};
-
+	_.addOverlay=function(element,id)
+	{
+		element.id=id?id:element.id;
+		this.overlayHolder.appendChild(element);
+	};
+	_.removeOverlay=function(element)
+	{
+		this.overlayHolder.removeChild(element);
+	};
 	_.addMarker = function(lat, lng) {
 		var marker = new this.markerItem();
 		marker.timestamp = new Date().getTime();
+		marker.uid = this.muid++;
 		marker.build();
 		marker.setStyle();
 		marker.lat = lat;
@@ -105,6 +124,30 @@ var SVGMap = function() {
 				return;
 			}
 		}
+	};
+	_.removeMarkerByUID=function(uid)
+	{
+		
+		for (var a = 0; a < this.markers.length; a++) {
+			if (this.markers[a].uid==uid) {
+				this.markerHolder.removeChild(this.markers[a].element);
+				delete this.markers[a];
+				this.markers.splice(a, 1);
+				return true;
+			}
+		}
+		return false;
+	};
+	_.getMarker=function(lat, lng)
+	{
+		for (var a = 0; a < this.markers.length; a++) {
+			var mlat = this.markers[a].lat;
+			var mlng = this.markers[a].lng;
+			if (lat == mlat && lng == mlng) {
+				return this.markers[a];
+			}
+		}
+		return null;
 	};
 	_.setMarkerXY = function(marker) {
 		var lat = marker.lat;
@@ -170,7 +213,10 @@ var SVGMap = function() {
 		this.setScale();
 
 		this.setXY();
-
+		
+		// this.x = -(-this.element.offsetLeft * this.scale - (x-this.x) * (1 - this.scale));
+		// this.y= -(-this.element.offsetTop * this.scale- (y -this.y) * (1 - this.scale));
+		
 		event.preventDefault();
 		event.stopPropagation();
 	};
@@ -270,8 +316,11 @@ var SVGMap = function() {
 
 		this.img.style.left = this.x + "px";
 		this.img.style.top = this.y + "px";
-		this.markerHolder.style.marginLeft = this.x + "px";
-		this.markerHolder.style.marginTop = this.y + "px";
+		this.markerHolder.style.left = this.x + "px";
+		this.markerHolder.style.top = this.y + "px";
+		this.overlayHolder.style.left = this.x + "px";
+		this.overlayHolder.style.top = this.y + "px";
+		
 
 	};
 	_.centerMap = function() {
@@ -279,8 +328,10 @@ var SVGMap = function() {
 		var y = (this.element.clientHeight - this.img.clientHeight) * 0.5;
 		this.img.style.left = x + "px";
 		this.img.style.top = y + "px";
-		this.markerHolder.style.marginLeft = x + "px";
-		this.markerHolder.style.marginTop = y + "px";
+		this.markerHolder.style.left = x + "px";
+		this.markerHolder.style.top = y + "px";
+		this.overlayHolder.style.left = x + "px";
+		this.overlayHolder.style.top= y + "px";
 		this.x = x;
 		this.y = y;
 	};
@@ -356,10 +407,12 @@ var SVGMap = function() {
 		//remove elements
 		this.element.removeChild(this.img);
 		this.element.removeChild(this.markerHolder);
+		this.element.removeChild(this.overlayHolder);
 
 		this.img.onload = null;
 		this.img = null;
 		this.markerHolder = null;
+		this.overlayHolder = null;
 		
 	};
 })();

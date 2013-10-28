@@ -53,7 +53,7 @@
 		overlay.style.left="10%";
 		overlay.style.top="10%";
 		
-		svgMap.addOverlay(overlay);
+		//svgMap.addOverlay(overlay);
 	}
 	
 	Main();

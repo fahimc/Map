@@ -200,8 +200,9 @@ var SVGMap = function() {
 		this.positionMarkers();
 	};
 	_.onMouseWheel = function(event) {
-		var x = this.mouseX(this.element, event);
-		var y = this.mouseY(this.element, event);
+
+		var x = this.mouseX(this.img, event)- this.getOffset(this.element).x;
+		var y = this.mouseY(this.img, event)- this.getOffset(this.element).y;
 		var delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
 		if (delta < 0) {
 			this.scale -= this.scaleIncrement;
@@ -210,17 +211,42 @@ var SVGMap = function() {
 			this.scale += this.scaleIncrement;
 
 		}
+		//get previous values
+		var px = this.x;
+		var py = this.y;
+		var pw = this.img.clientWidth;
+		var ph = this.img.clientHeight;
 		this.setScale();
+		this.centerAroundMouse(x, y, px, py, pw, ph);
 
 		this.setXY();
-		
-		// this.x = -(-this.element.offsetLeft * this.scale - (x-this.x) * (1 - this.scale));
-		// this.y= -(-this.element.offsetTop * this.scale- (y -this.y) * (1 - this.scale));
-		
 		event.preventDefault();
 		event.stopPropagation();
 	};
+	_.getOffset = function(el) {
+		var _x = 0;
+		var _y = 0;
+		while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop)) {
+			_x += el.offsetLeft - el.scrollLeft;
+			_y += el.offsetTop - el.scrollTop;
+			el = el.offsetParent;
+		}
+		return {
+			y : _y,
+			x : _x
+		};
+	};
+	_.centerAroundMouse = function(x, y, px, py, pw, ph) {
+		//work out the increase
+		var widthScale = this.img.clientWidth / pw;
+		var heightScale = this.img.clientHeight / ph;
 
+		var toX =(this.x+x);
+		var toY =(this.y+y);
+		this.x =-((x * widthScale)-toX);
+		this.y =-((y * heightScale)-toY);
+		
+	};
 	_.setScale = function(value) {
 		if (value != undefined)
 			this.scale = value;

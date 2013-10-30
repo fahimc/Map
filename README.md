@@ -1,4 +1,4 @@
 Map
 ===
 
-create a map with markers
+[SVGMap API REFERENCE](http://fahimc.github.io/Map)

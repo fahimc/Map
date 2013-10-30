@@ -1,12 +1,17 @@
 var MAPINDEX=0;
+/**
+ * @constructor
+ */
 var SVGMap = function() {
 	this.element = null;
 	this.markerHolder = null;
 	this.overlayHolder = null;
-	
 	this.src = null;
+	 /** @property {number} scale This is the current scale value. */
 	this.scale = 1;
+	 /** @property {number} scaleMax This is the max scale value. */
 	this.scaleMax = 3;
+	 /** @property {number} scaleMin  This is the min scale value. */
 	this.scaleMin = 1;
 	this.startX = 1;
 	this.startY = 1;
@@ -17,7 +22,9 @@ var SVGMap = function() {
 	this.svgHeight = 551;
 	this.svgWidth = 322;
 	this.handlers = [];
+	 /** @property {Array} markers  This is an array of markers on the map. */
 	this.markers = [];
+	 /** @property {Object} markerItem  This is a reference to the marker object */
 	this.markerItem = SVGMapMarker;
 	this.currentX=0;
 	this.endX=0;
@@ -31,7 +38,12 @@ var SVGMap = function() {
 (function() {
 	var _ = SVGMap.prototype;
 
-	
+	/**
+	 build the SVGMap. You need to call this method after creating an instance.
+	 @public
+	 @alias SVGMap.build
+	 @memberOf SVGMap
+	 */
 	_.build = function() {
 		
 		this.uid = MAPINDEX++;
@@ -75,6 +87,12 @@ var SVGMap = function() {
 			return false;
 		};
 	};
+	/**
+	This arranges all the child elements and its self. X,Y,width, height etc..
+	 @public
+	 @alias SVGMap.arrange
+	 @memberOf SVGMap
+	 */
 	_.arrange = function() {
 		this.img.style.width = (this.scale * this.element.clientWidth) + "px";
 
@@ -87,15 +105,38 @@ var SVGMap = function() {
 		this.setXY();
 		this.positionMarkers();
 	};
+	/**
+	You can add DOM elements to the overlay layer.
+	 @public
+	 @alias SVGMap.addOverlay
+	 @memberOf SVGMap
+	 @param {DOMElement} element The element you wish to add
+	 @param {String} id (optional)provide a unique id for reference.
+	 */
 	_.addOverlay=function(element,id)
 	{
 		element.id=id?id:element.id;
 		this.overlayHolder.appendChild(element);
 	};
+	/**
+	You can remove DOM elements to the overlay layer.
+	 @public
+	 @alias SVGMap.removeOverlay
+	 @memberOf SVGMap
+	 @param {DOMElement} element The element you wish to remove
+	 */
 	_.removeOverlay=function(element)
 	{
 		this.overlayHolder.removeChild(element);
 	};
+	/**
+	You can add a marker to the map.
+	 @public
+	 @alias SVGMap.addMarker
+	 @memberOf SVGMap
+	 @param {Number} lat provide the latittude
+	 @param {Number} lng provide the longitude
+	 */
 	_.addMarker = function(lat, lng) {
 		var marker = new this.markerItem();
 		marker.timestamp = new Date().getTime();
@@ -113,6 +154,14 @@ var SVGMap = function() {
 
 		return marker;
 	};
+	/**
+	You can remove a marker from the map.
+	 @public
+	 @alias SVGMap.removeMarker
+	 @memberOf SVGMap
+	 @param {Number} lat provide the latittude
+	 @param {Number} lng provide the longitude
+	 */
 	_.removeMarker = function(lat, lng) {
 		for (var a = 0; a < this.markers.length; a++) {
 			var mlat = this.markers[a].lat;
@@ -138,6 +187,14 @@ var SVGMap = function() {
 		}
 		return false;
 	};
+	/**
+	You can get a marker.
+	 @public
+	 @alias SVGMap.getMarker
+	 @memberOf SVGMap
+	 @param {Number} lat provide the latittude
+	 @param {Number} lng provide the longitude
+	 */
 	_.getMarker=function(lat, lng)
 	{
 		for (var a = 0; a < this.markers.length; a++) {
@@ -247,12 +304,21 @@ var SVGMap = function() {
 		this.y =-((y * heightScale)-toY);
 		
 	};
+	/**
+	provide a scale value for the map.
+	 @public
+	 @alias SVGMap.setScale
+	 @memberOf SVGMap
+	 @param {Number} value 
+	 */
 	_.setScale = function(value) {
 		if (value != undefined)
 			this.scale = value;
 		if (this.scale < this.scaleMin)
 			this.scale = this.scaleMin;
-
+		if (this.scale > this.scaleMax)
+			this.scale = this.scaleMax;
+			
 		this.setXY();
 
 		this.arrange();
@@ -321,6 +387,12 @@ var SVGMap = function() {
 
 		return this.handlers[funcName];
 	};
+	/**
+	set the x and y of the map and its elements
+	 @public
+	 @alias SVGMap.setXY
+	 @memberOf SVGMap
+	 */
 	_.setXY = function() {
 		if (this.x > 0)
 			this.x = 0;
@@ -349,6 +421,12 @@ var SVGMap = function() {
 		
 
 	};
+	/**
+	center the map
+	 @public
+	 @alias SVGMap.centerMap
+	 @memberOf SVGMap
+	 */
 	_.centerMap = function() {
 		var x = (this.element.clientWidth - this.img.clientWidth) * 0.5;
 		var y = (this.element.clientHeight - this.img.clientHeight) * 0.5;
@@ -416,6 +494,12 @@ var SVGMap = function() {
 		y -= elem.offsetTop;
 		return y;
 	};
+	/**
+	detroy and remove everything in the map.
+	 @public
+	 @alias SVGMap.purge
+	 @memberOf SVGMap
+	 */
 	_.purge=function()
 	{
 		

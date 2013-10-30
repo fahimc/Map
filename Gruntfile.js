@@ -2,16 +2,16 @@ module.exports = function(grunt) {
 	grunt.file.defaultEncoding = 'utf8';
 	grunt.initConfig({
 		pkg : grunt.file.readJSON('package.json'),
-		gitclone : {
-			clone : {
-				options : {
-					repository : 'https://github.com/angular/angular-seed.git',
-					branch : 'master'
-				}
+		jsdoc : {
+			dist : {
+				src : ['app/js/component/map/*.js', 'README.md'],
+				dest : 'docs'
 			}
 		},
 		concat : {
 			options : {
+				 banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+        '<%= grunt.template.today("yyyy-mm-dd") %> \n The code is on github https://github.com/fahimc/Map \n API reference http://fahimc.github.io/Map */\n',
 				// define a string to put between each file in the concatenated output
 				separator : ';'
 			},
@@ -30,9 +30,8 @@ module.exports = function(grunt) {
 	});
 	// grunt.loadNpmTasks('grunt-git');
 	// A very basic default task.
-	grunt.registerTask('default', [""], function() {
-
-	});
+	grunt.loadNpmTasks('grunt-jsdoc');
+	grunt.registerTask('default', [ "jsdoc"]);
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.registerTask('compile', ["concat"]);
 	grunt.registerTask('setup', 'setup complete', function() {
